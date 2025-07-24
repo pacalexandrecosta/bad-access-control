@@ -2,7 +2,6 @@ package pac.owasp.a012021.usuario;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pac.owasp.a012021.common.jwt.JwtService;
 import pac.owasp.a012021.contracheque.ContrachequeCreateDto;
@@ -35,21 +34,20 @@ public class UsuarioController {
         return ResponseEntity.ok(new LoginResponseDto(token));
     }
 
-    @PreAuthorize("@autorizador.podeVisualizar(#id)")
-    @GetMapping("/{id}/contracheques")
-    public ResponseEntity<List<ContrachequeDto>> obterCheques(@PathVariable Long id) {
-        var contracheques = contrachequeService.obterContracheques(id);
+    @GetMapping("/contracheques")
+    public ResponseEntity<List<ContrachequeDto>> obterCheques() {
+        var usuarioLogado = usuarioService.obterUsuarioLogado();
+        var contracheques = contrachequeService.obterContracheques(usuarioLogado.getId());
         var dtos = contracheques
                 .stream().map(ContrachequeDto::new)
                 .toList();
         return ResponseEntity.ok(dtos);
     }
 
-    @PreAuthorize("@autorizador.podeVisualizar(#id)")
-    @PostMapping("/{id}/contracheques")
-    public ResponseEntity<ContrachequeDto> inserirContracheque(@PathVariable Long id, @RequestBody ContrachequeCreateDto contrachequeCreateDto) {
-
-        var contracheque = contrachequeService.inserir(id, contrachequeCreateDto);
+    @PostMapping("/contracheques")
+    public ResponseEntity<ContrachequeDto> inserirContracheque(@RequestBody ContrachequeCreateDto contrachequeCreateDto) {
+        var usuarioLogado = usuarioService.obterUsuarioLogado();
+        var contracheque = contrachequeService.inserir(usuarioLogado.getId(), contrachequeCreateDto);
         return ResponseEntity.ok(new ContrachequeDto(contracheque));
     }
 }

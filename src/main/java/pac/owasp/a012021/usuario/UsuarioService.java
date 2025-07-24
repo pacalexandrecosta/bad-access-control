@@ -3,6 +3,8 @@ package pac.owasp.a012021.usuario;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +48,14 @@ public class UsuarioService {
         if (!passwordEncoder.matches(loginRequestDto.password(), usuario.getPassword())) {
             throw new AccessDeniedException("Usuário/senha incorretos");
         }
+    }
 
-
+    public Usuario obterUsuarioLogado() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof Usuario) {
+            var usuario = (Usuario) authentication.getPrincipal();
+            return usuario;
+        }
+        return null;
     }
 }
