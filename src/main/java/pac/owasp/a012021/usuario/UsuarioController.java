@@ -2,6 +2,7 @@ package pac.owasp.a012021.usuario;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pac.owasp.a012021.common.jwt.JwtService;
 import pac.owasp.a012021.contracheque.ContrachequeCreateDto;
@@ -34,6 +35,7 @@ public class UsuarioController {
         return ResponseEntity.ok(new LoginResponseDto(token));
     }
 
+    @PreAuthorize("@autorizador.podeVisualizar(#id)")
     @GetMapping("/{id}/contracheques")
     public ResponseEntity<List<ContrachequeDto>> obterCheques(@PathVariable Long id) {
         var contracheques = contrachequeService.obterContracheques(id);
@@ -43,6 +45,7 @@ public class UsuarioController {
         return ResponseEntity.ok(dtos);
     }
 
+    @PreAuthorize("@autorizador.podeVisualizar(#id)")
     @PostMapping("/{id}/contracheques")
     public ResponseEntity<ContrachequeDto> inserirContracheque(@PathVariable Long id, @RequestBody ContrachequeCreateDto contrachequeCreateDto) {
 

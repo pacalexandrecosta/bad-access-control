@@ -31,8 +31,8 @@ public class ContrachequeService {
                 .orElseThrow(() -> new EntityNotFoundException("Contracheque nao encontrado"));
     }
 
-    public List<Contracheque> obterContracheques(Long userId) {
-        return contrachequeRepository.findByUsuarioId(userId);
+    public List<Contracheque> obterContracheques(Long usuarioId) {
+        return contrachequeRepository.findByUsuarioId(usuarioId);
     }
 
     public List<Contracheque> obterContracheques(String login) {
