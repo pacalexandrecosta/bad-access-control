@@ -1,5 +1,5 @@
 package pac.owasp.a012021.usuario;
 
-public record UsuarioCreateDto(Long id, String login, String password) {
+public record UsuarioCreateDto(String login, String password) {
 
 }
