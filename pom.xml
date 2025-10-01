@@ -104,6 +104,42 @@
                     </excludes>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.19.1</version>
+                <executions>
+                    <execution>
+                        <id>display-dependency-updates</id>
+                        <phase>verify</phase> <!-- Vincula à fase verify; execute mvn verify -->
+                        <goals>
+                            <goal>display-dependency-updates</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>11.1.1</version>
+                <configuration>
+                    <failBuildOnCVSS>7
+                    </failBuildOnCVSS> <!-- Falha se CVSS >= 7 (alta severidade); ajuste conforme necessário -->
+                    <suppressionFiles>
+                        <suppressionFile>suppressions.xml
+                        </suppressionFile> <!-- Opcional: arquivo para suprimir falsos positivos -->
+                    </suppressionFiles>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
